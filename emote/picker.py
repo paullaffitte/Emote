@@ -631,12 +631,40 @@ class EmojiPicker(Gtk.Window):
         time.sleep(0.15)
 
         if not config.is_wayland:
-            os.system("xdotool key ctrl+v")
+            #
+            print('paste')
+            cb = Gtk.Clipboard.get(Gdk.SELECTION_SECONDARY)
+            emoji = cb.wait_for_text()
+            os.system(f'xdotool type --clearmodifiers "{emoji}"')
+            # os.system('xdotool type --clearmodifiers "$(xclip -o -selection secondary)"')
 
     def add_emoji_to_recent(self, emoji):
         user_data.update_recent_emojis(emoji)
         emojis.update_recent_category()
 
     def copy_to_clipboard(self, content):
-        cb = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+        cb = Gtk.Clipboard.get(Gdk.SELECTION_SECONDARY)
         cb.set_text(content, -1)
+
+
+# - save clipboard
+#     # wait_is_image_available
+#     # wait_is_rich_text_available
+#     # wait_is_target_available
+#     # wait_is_text_available
+#     # wait_is_uris_available
+
+#     # wait_for_contents
+#     # wait_for_image
+#     # wait_for_rich_text
+#     # wait_for_targets
+#     # wait_for_text
+#     # wait_for_uris
+# - primary clipboard middle click (https://askubuntu.com/a/729372/669964)
+#     cb = Gtk.Clipboard.get(Gdk.SELECTION_PRIMARY)
+#     os.system("xdotool click 2")
+# - secondary clipboard
+#     cb = Gtk.Clipboard.get(Gdk.SELECTION_SECONDARY)
+#     os.system('xdotool type --clearmodifiers "$(xclip -o -selection secondary)"')
+# - no clipboard
+#     os.system(f'xdotool type --clearmodifiers "{emoji}"')
